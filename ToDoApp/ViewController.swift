@@ -72,6 +72,8 @@ class ViewController: UIViewController, UITableViewDataSource,UITableViewDelegat
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell",for: indexPath)
         cell.textLabel?.lineBreakMode = .byWordWrapping
         cell.textLabel?.numberOfLines = 0
+    
+        
         if showCompleted == false{
             cell.textLabel?.textColor = textWriting
             cell.textLabel?.text = reminderItems[indexPath.row]
