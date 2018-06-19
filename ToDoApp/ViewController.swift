@@ -20,8 +20,9 @@ class ViewController: UIViewController, UITableViewDataSource,UITableViewDelegat
     var reminderItems = [String]()
     var completeItems = [String]()
     
-    let textWriting = UIColor(red: 254.0/255.0, green: 235.0/255.0, blue: 16.0/255.0, alpha: 1.0)
-    let defaultTint = UIColor(red: 102.0/255.0, green: 108.0/255.0, blue: 232.0/255.0, alpha: 1.0)
+    let secondaryWriting = UIColor(red: 0.0/255.0, green: 70.0/255.0, blue: 255.0/255.0, alpha: 1.0)
+    let primaryWriting = UIColor(red: 78.0/255.0, green: 255.0/255.0, blue: 72.0/255.0, alpha: 1.0)
+    let defaultTint = UIColor(red: 255.0/255.0, green: 255.0/255.0, blue: 255.0/255.0, alpha: 1.0)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,12 +37,12 @@ class ViewController: UIViewController, UITableViewDataSource,UITableViewDelegat
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+        
     }
 
     //textfield
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if textField.text == ""{
-            print("test 1")
             self.view.endEditing(true)
         }else{
             if reminderItems[0] == "Congrats! You remembered everything! Add more stuff to remember"{
@@ -75,16 +76,18 @@ class ViewController: UIViewController, UITableViewDataSource,UITableViewDelegat
     
         
         if showCompleted == false{
-            cell.textLabel?.textColor = textWriting
+            cell.textLabel?.textColor = secondaryWriting
+
             cell.textLabel?.text = reminderItems[indexPath.row]
         }
         else{
-            cell.textLabel?.textColor = defaultTint
+            cell.textLabel?.textColor = primaryWriting
             cell.textLabel?.text = completeItems[indexPath.row]
         }
        
         return cell
     }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.view.endEditing(true)
     }
@@ -94,7 +97,7 @@ class ViewController: UIViewController, UITableViewDataSource,UITableViewDelegat
             self.completeItems.remove(at: indexPath.row)
             self.tbReminders.reloadData()
         }
-        incomplete.backgroundColor = textWriting
+        incomplete.backgroundColor = secondaryWriting
         
         let complete = UITableViewRowAction(style: .normal, title: "Complete") { action, index in
             if self.showCompleted == false{
@@ -104,7 +107,7 @@ class ViewController: UIViewController, UITableViewDataSource,UITableViewDelegat
                 self.tbReminders.reloadData()
             }
         }
-        complete.backgroundColor = defaultTint
+        complete.backgroundColor = primaryWriting
         
         
         let delete = UITableViewRowAction(style: .normal, title: "Delete") { action, index in
@@ -117,17 +120,18 @@ class ViewController: UIViewController, UITableViewDataSource,UITableViewDelegat
             }
         }
         delete.backgroundColor = UIColor.red
+      
         if showCompleted == false{
             return [complete,delete]
         }else{
-            return [delete,incomplete]
+            return [incomplete,delete]
         }
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+    private func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: IndexPath) {
         // you need to implement this method too or you can't swipe to display the actions
     }
     func appendDataToList(){
@@ -145,6 +149,7 @@ class ViewController: UIViewController, UITableViewDataSource,UITableViewDelegat
                     appendDataToList()
                 }else{
                     
+                    
                     appendDataToList()
                 }
             }else{
@@ -159,24 +164,26 @@ class ViewController: UIViewController, UITableViewDataSource,UITableViewDelegat
             showCompleted = false
             tbReminders.reloadData()
             showCompletedBtn.setTitle("Show Completed", for: .normal)
-            showCompletedBtn.backgroundColor = defaultTint
-            showCompletedBtn.setTitleColor(textWriting, for: .normal)
+            showCompletedBtn.backgroundColor = primaryWriting
+            showCompletedBtn.setTitleColor(defaultTint, for: .normal)
             
+            reminderInputField.text = ""
+            reminderInputField.textColor = secondaryWriting
             reminderInputField.isUserInteractionEnabled = true
             reminderInputField.placeholder = "Enter a reminder here"
         }
             
-        else if showCompleted == false{
+        else {
             showCompleted = true
             tbReminders.reloadData()
             showCompletedBtn.setTitle("Show Reminders", for: .normal)
-            showCompletedBtn.backgroundColor = textWriting
+            showCompletedBtn.backgroundColor = secondaryWriting
             showCompletedBtn.setTitleColor(defaultTint, for: .normal)
+            
             reminderInputField.isUserInteractionEnabled = false
-            reminderInputField.text = ""
-            reminderInputField.placeholder = "Go back to reminders page to add a reminder"
+            reminderInputField.textColor = .black
+            reminderInputField.text = "A list of your completed reminders"
         }
-        print("\(showCompleted)")
     }
 }
 
